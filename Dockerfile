@@ -48,3 +48,14 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && docker-php-ext-install gd \
     \
     && apk del .build-deps
+
+RUN rm -rf /var/www/html \
+    && mkdir -p /website \
+    && chown www-data:www-data /website \
+    && chmod 777 /website \
+    && { \
+    echo '[global]'; \
+    echo 'daemonize = no'; \
+    } | tee /usr/local/etc/php-fpm.d/zz-docker.conf
+
+WORKDIR /website
